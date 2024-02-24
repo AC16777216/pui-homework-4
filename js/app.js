@@ -1,42 +1,32 @@
-// UNUSED - An array of all possible glazing options
-/* let allGlazes = [
-    {
-        glazeType: 'keep-original',
-        glazePrice: 0.0
-    },
-    {
-        glazeType: 'sugar-milk',
-        glazePrice: 0.0
-    },
-    {
-        glazeType: 'vanilla-milk',
-        glazePrice: 0.5
-    },
-    {
-        glazeType: 'double-chocolate',
-        glazePrice: 1.5
-    }
-] */
+//import {rolls, rollType} from './rollsData.js'
 
-// UNUSED - An array of all possible pack size options
-/*let allSizes = [
-    {
-        sizeType: '1',
-        sizePrice: 1.0
+// Rolls array containing information for every type of roll
+const rolls = {
+    "Original": {
+        "basePrice": 2.49,
+        "imageFile": "original-cinnamon-roll.jpg"
     },
-    {
-        sizeType: '3',
-        sizePrice: 3.0
+    "Apple": {
+        "basePrice": 3.49,
+        "imageFile": "apple-cinnamon-roll.jpg"
     },
-    {
-        sizeType: '6',
-        sizePrice: 5.0
+    "Raisin": {
+        "basePrice": 2.99,
+        "imageFile": "raisin-cinnamon-roll.jpg"
     },
-    {
-        sizeType: '12',
-        sizePrice: 10.0
-    }
-]*/
+    "Walnut": {
+        "basePrice": 3.49,
+        "imageFile": "walnut-cinnamon-roll.jpg"
+    },
+    "Double-Chocolate": {
+        "basePrice": 3.99,
+        "imageFile": "double-chocolate-cinnamon-roll.jpg"
+    },
+    "Strawberry": {
+        "basePrice": 3.99,
+        "imageFile": "strawberry-cinnamon-roll.jpg"
+    }    
+};
 
 const price = {
     basePrice: 2.49,
@@ -106,6 +96,30 @@ function onSizeChange() {
     displayPrice(price);
 }
 
+
+// Get rollType
+const queryString = window.location.search;
+const params = new URLSearchParams(queryString);
+const rollType = params.get('roll');
+//console.log(rollType);
+//console.log(rolls[rollType]);
+
+// Change PRODUCT banner depending on rollType
+let productBannerElem = document.querySelector('#product-banner');
+if (productBannerElem != null){
+    productBannerElem.innerHTML = rollType + " cinnamon roll";
+}
+
+// Change image depending on rollType
+let productImageElem = document.querySelector('.product-image');
+productImageElem.src = "images/products/" + rolls[rollType]["imageFile"];
+//console.log("images/products/" + rolls[rollType]["imageFile"]);
+
+// Change basePrice depending on rollType
+price.basePrice = rolls[rollType]["basePrice"];
+//console.log(rolls[rollType]["basePrice"]);
+
+// Section for modifying displayed price
 price.priceElement = document.querySelector("#price");
 price.glazeElement = document.querySelector("#glazing");
 price.sizeElement = document.querySelector("#pack-size");
@@ -114,3 +128,44 @@ price.glazeElement.addEventListener('change', onGlazeChange);
 price.sizeElement.addEventListener('change', onSizeChange);
 
 displayPrice(price);
+
+
+// cart Array, and Roll objects to be stored in cart
+let cart = [];
+class Roll {
+    constructor(rollType, rollGlazing, packSize, basePrice) {
+        this.type = rollType;
+        this.glazing =  rollGlazing;
+        this.size = packSize;
+        this.basePrice = basePrice;
+    }
+
+    printRoll() {
+        console.log("rollType is " + this.type);
+        console.log("rollGlazing is " + this.glazing);
+        console.log("packSize is " + this.size);
+        console.log("basePrice is " + this.basePrice);
+    }
+}
+
+// Section for adding Rolls to cart
+function addToCart(){
+    const glazing = price.glazeElement.value;
+    //console.log(glazing);
+    const sizing = price.sizeElement.value;
+
+    let newRoll = new Roll(rollType, glazing, sizing, price.basePrice);
+    //console.log("Created new roll");
+    //newRoll.printRoll();
+    cart.push(newRoll);
+    //console.log("New roll added to cart");
+
+    // print statements
+    for(let i=0; i<cart.length; i++) {
+        let aRoll = cart[i];
+        aRoll.printRoll();
+    }
+}
+
+let addToCartElem = document.querySelector('#add-cart-button');
+addToCartElem.addEventListener('click', addToCart)

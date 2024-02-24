@@ -34,6 +34,10 @@ div#banner {
 	padding-top:  30px;
 	font-size:  25px;
 }
+div#product-banner {
+	padding-top:  30px;
+	font-size:  25px;
+}
 
 .product-image {
 	border:  3px solid black;
@@ -66,6 +70,10 @@ div#banner {
 }
 
 div#banner {
+	text-align: left;
+	margin-top: 30px;
+}
+div#product-banner {
 	text-align: left;
 	margin-top: 30px;
 }
